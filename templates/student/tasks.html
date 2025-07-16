@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold text-indigo-600 mb-6">My Tasks</h1>
+
+    {% if tasks_assigned %}
+    <div class="space-y-6">
+        {% for task in tasks_assigned %}
+        <div class="bg-white shadow rounded-lg p-5 border border-gray-200 flex justify-between items-center">
+            <div>
+                <h2 class="text-xl font-semibold text-gray-800">{{ task.task_data.content }}</h2>
+                <p class="text-gray-600">Points: {{ task.task_data.points }}</p>
+                <p class="text-sm text-gray-500">Deadline: {{ task.task_data.deadline.strftime('%Y-%m-%d %H:%M') }}</p>
+                <p class="mt-2">
+                    Status:
+                    {% if task.status == 'Completed' %}
+                        <span class="text-green-600 font-bold">Completed</span>
+                    {% else %}
+                        <span class="text-yellow-600 font-bold">Pending</span>
+                    {% endif %}
+                </p>
+            </div>
+            <form method="POST" action="{{ url_for('toggle_task_status', assigned_id=task.id) }}">
+                <button type="submit"
+                        class="px-4 py-2 rounded text-white
+                        {% if task.status == 'Completed' %}bg-yellow-500 hover:bg-yellow-600{% else %}bg-green-500 hover:bg-green-600{% endif %}">
+                    {% if task.status == 'Completed' %}
+                        Mark Incomplete
+                    {% else %}
+                        Mark Complete
+                    {% endif %}
+                </button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p class="text-gray-600">You don't have any tasks assigned.</p>
+    {% endif %}
+</div>
+{% endblock %}

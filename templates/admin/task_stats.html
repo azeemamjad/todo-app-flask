@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Task Statistics{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto my-10 p-6 bg-white rounded-lg shadow">
+    <h1 class="text-2xl font-bold text-indigo-600 mb-6">Student Task Stats</h1>
+
+    <div class="w-full flex justify-center">
+        <div class="overflow-x-auto">
+            <table class="table-auto text-sm text-left text-gray-700">
+                <thead class="bg-gray-100 text-xs uppercase font-semibold text-gray-600">
+                    <tr>
+                        <th class="px-4 py-3">Student ID</th>
+                        <th class="px-4 py-3">Name</th>
+                        <th class="px-4 py-3">Completed</th>
+                        <th class="px-4 py-3">Uncompleted</th>
+                        <th class="px-4 py-3">Progress</th>
+                        <th class="px-4 py-3">Points Collected</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in stats %}
+                    <tr class="border-b hover:bg-gray-50 text-center">
+                        <td class="px-4 py-3">{{ stat.id }}</td>
+                        <td class="px-4 py-3">{{ stat.name }}</td>
+                        <td class="px-4 py-3">{{ stat.completed }}</td>
+                        <td class="px-4 py-3">{{ stat.uncompleted }}</td>
+                        <td class="px-4 py-3 w-60">
+                            <div class="relative w-full h-5 bg-gray-200 rounded">
+                                <div class="absolute top-0 left-0 h-full rounded" style="
+                                    width: {{ stat.progress }}%;
+                                    background-color: {% if stat.progress < 50 %}#f87171{% elif stat.progress < 80 %}#facc15{% else %}#4ade80{% endif %};
+                                    transition: width 0.3s ease;
+                                "></div>
+                                <div class="absolute inset-0 text-center text-xs font-medium leading-5 text-black">
+                                    {{ stat.progress }}%
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3 font-medium">{{ stat.points }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

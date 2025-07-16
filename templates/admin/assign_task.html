@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Assign Task{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto my-10 bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-6 text-indigo-600">Assign Task to Students</h1>
+
+    <form method="POST" action="{{ url_for('assign_task') }}">
+        <!-- Task Selection -->
+        <div class="mb-6">
+            <label for="task_id" class="block mb-2 font-medium">Select Task:</label>
+            <select name="task_id" id="task_id" required class="w-full border px-3 py-2 rounded">
+                <option value="">-- Choose a task --</option>
+                {% for task in tasks %}
+                    <option value="{{ task.id }}">{{ task.content }} ({{ task.points }} pts)</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Student Selection -->
+        <div class="mb-4">
+            <label class="block mb-2 font-medium">Assign to:</label>
+            <div class="flex items-center mb-2">
+                <input type="checkbox" id="select-all" class="mr-2">
+                <label for="select-all" class="text-sm font-medium text-gray-700">Select All</label>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {% for student in students %}
+                    <div class="flex items-center">
+                        <input type="checkbox" name="student_ids" value="{{ student.id }}" class="student-checkbox mr-2">
+                        <label class="text-sm">{{ student.username }}</label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded">
+            Assign Task
+        </button>
+    </form>
+</div>
+
+<!-- JavaScript: Select All Checkbox -->
+<script>
+    document.getElementById('select-all').addEventListener('change', function () {
+        const checked = this.checked;
+        document.querySelectorAll('.student-checkbox').forEach(cb => cb.checked = checked);
+    });
+</script>
+{% endblock %}
